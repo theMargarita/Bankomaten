@@ -5,22 +5,48 @@ namespace Bankomat
 {
     internal class Program
     {
+        //Users with password
+        static string[][] users = { ["User01", "1111"], ["User02", "2222"], ["User03", "3333"], ["User04", "4444"], ["User05", "5555"] };
         static void Main(string[] args)
         {
-            //Users with pin
-            string[] username = ["User01", "User02", "User03", "User04", "User05"];
-            int[] password = [1111, 2222, 3333, 4444, 5555];
+            Console.WriteLine("Welcome to the Bank AB. ");
 
-            bool trueORfalse = true;
-            Console.WriteLine("Welcome to the Bank. ");
-            Console.WriteLine("Please enter you username and password: ");
-            int attempt = 3;
+            string input = Console.ReadLine();
+            string inputPass = Console.ReadLine();
 
 
-            for (int typo = 1; typo < attempt; typo++)
+            bool login = true;
+            int attempts = 3;
+
+            while (login)
             {
+                Console.WriteLine("Enter you username:");
+                string user = Console.ReadLine();
+                Console.WriteLine("Enter you password:");
+                string userPass = Console.ReadLine();
+
+                for (int i = 1; i < attempts; i++)
+                {
+                    for (int j = 0; j < users.Length; j++)
+                    {
+
+                        if (users[j][0] == input && users[j][1] == inputPass)
+                        {
+                            Console.WriteLine(users);
+
+                        }
+                    }
+                }
 
             }
+
+
+
+        }
+
+        public static void TheMenu()
+        {
+            bool trueORfalse = true;
 
             while (trueORfalse)
             {
@@ -49,28 +75,8 @@ namespace Bankomat
                         Console.WriteLine("Invaild choice, try again.");
                         break;
                 }
-
             }
-
         }
-
-        //private static int Authenticate(string[] username, string[] password)
-        //{
-        //    Console.WriteLine("UserName: ");
-        //    string user = Console.ReadLine();
-        //    Console.WriteLine("Password: ");
-        //    string userPass = Console.ReadLine();
-        //    if (int i = 0; i < username.Length; i++) 
-        //    {
-        //        if (username[i] == user && password[i] == userPass)
-        //        {
-        //            return i;
-        //        }
-        //    }
-
-        //}
-
-
     }
 }
 
