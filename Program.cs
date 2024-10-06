@@ -52,7 +52,7 @@ namespace Bankomat
         //method to check if the username is correct
         public static bool ValitadeUser(string username)
         {
-            for (int i; i < users.Length; i++)
+            for (int i = 0; i < users.Length; i++)
             {
 
                 if (users[i][0] == username)
@@ -63,6 +63,21 @@ namespace Bankomat
             return false;
         }
 
+        //method to check is the password is correct witht he right user
+        public static bool ValidatePassword(string username, string password)
+        {
+            for (int i = 0; i < users.Length; i++)
+            {
+                if (users[i][0] == username && users[i][1] == password)
+                {
+
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        //the menu method, if the users manage to sign in
         public static void TheMenu()
         {
             bool trueORfalse = true;
