@@ -16,43 +16,46 @@ namespace Bankomat
         };
         static void Main(string[] args)
         {
-            Console.WriteLine("Welcome to the Margo Bank AB. \n");
 
             bool login = true;
             int attempts = 3;
 
             //for int i is 1 and if i is smaller than attempts, i rises with 1
             //while (login) { }
-
-            for (int i = 1; i <= attempts; i++)
+            while (login)
             {
-                Console.WriteLine("Enter you username: ");
-                string input = Console.ReadLine();
-                Console.WriteLine("Enter your password: ");
-                string inputPassword = Console.ReadLine();
+                for (int i = 1; i <= attempts; i++)
+                {
+                    Console.WriteLine("Welcome to the Margo Bank AB \n");
+                    Console.WriteLine("Enter you username: ");
+                    string input = Console.ReadLine();
+                    Console.WriteLine("Enter your password: ");
+                    string inputPassword = Console.ReadLine();
 
-                //to check if the username is correct 
-                if (ValitadeUser(input))
-                {
-                    //to check the username and the password, if correct and in the same index
-                    if (ValidatePassword(input, inputPassword))
+                    //to check if the username is correct 
+                    if (ValitadeUser(input))
                     {
-                        Console.WriteLine("The login was successful.\n");
-                        login = true;
-                        TheMenu();
+                        //to check the username and the password, if correct and in the same index
+                        if (ValidatePassword(input, inputPassword))
+                        {
+                            Console.WriteLine("The login was successful.\n");
+                            login = true;
+                            TheMenu();
+                        }
                     }
+                    //if the user uses all the attempts - program shuts down
+                    if (i == attempts)
+                    {
+                        Console.WriteLine("Too many failed attempts. Access denied.");
+                        login = false;
+                    }
+                    //if the user types wrong
+                    else if (!ValidatePassword(input, inputPassword))
+                    {
+                        Console.WriteLine($"Wrong username or password, try again.\n");
+                    }
+                    Console.WriteLine();
                 }
-                //if the user uses all the attempts - program shuts down
-                if (i == attempts)
-                {
-                    Console.WriteLine("Too many failed attempts. Access denied.");
-                    break;
-                }//if the user types wrong
-                else if (!ValidatePassword(input, inputPassword))
-                {
-                    Console.WriteLine($"Wrong username or password, try again.\n");
-                }
-                Console.WriteLine();
             }
         }
 
@@ -115,6 +118,11 @@ namespace Bankomat
                         break;
 
                     case 4:
+                        //while lopp not true, return to login 
+                        Console.WriteLine("Signing out...");
+                        System.Threading.Thread.Sleep(1500);
+                        Console.Clear();
+                        trueORfalse = false;
                         break;
 
                     default:
