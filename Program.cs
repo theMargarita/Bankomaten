@@ -49,6 +49,20 @@ namespace Bankomat
 
         }
 
+        //method to check if the username is correct
+        public static bool ValitadeUser(string username)
+        {
+            for (int i; i < users.Length; i++)
+            {
+
+                if (users[i][0] == username)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         public static void TheMenu()
         {
             bool trueORfalse = true;
