@@ -7,7 +7,7 @@ namespace Bankomat
     {
         //Users with password
         static string[][] users =
-            {
+        {
             new string[] {"User01", "1111" },
             new string[] {"User02", "2222" },
             new string[] {"User03", "3333" },
@@ -16,37 +16,44 @@ namespace Bankomat
         };
         static void Main(string[] args)
         {
-            Console.WriteLine("Welcome to the Bank AB. \nenter twice");
-
-            string input = Console.ReadLine();
-            string inputPass = Console.ReadLine();
-
+            Console.WriteLine("Welcome to the Margo Bank AB. \n");
 
             bool login = true;
             int attempts = 3;
 
+            //for int i is 1 and if i is smaller than attempts, i rises with 1
+            //while (login) { }
 
-            Console.WriteLine("Enter you username:");
-            string user = Console.ReadLine();
-            Console.WriteLine("Enter you password:");
-            string userPass = Console.ReadLine();
-
-            for (int i = 1; i < attempts; i++)
+            for (int i = 1; i <= attempts; i++)
             {
-                for (int j = 0; j < users.Length; j++)
+                Console.WriteLine("Enter you username: ");
+                string input = Console.ReadLine();
+                Console.WriteLine("Enter your password: ");
+                string inputPassword = Console.ReadLine();
+
+                //to check if the username is correct 
+                if (ValitadeUser(input))
                 {
-
-                    if (users[j][0] == input && users[j][1] == inputPass)
+                    //to check the username and the password, if correct and in the same index
+                    if (ValidatePassword(input, inputPassword))
                     {
-
+                        Console.WriteLine("The login was successful.\n");
+                        login = true;
+                        TheMenu();
                     }
                 }
+                //if the user uses all the attempts - program shuts down
+                if (i == attempts)
+                {
+                    Console.WriteLine("Too many failed attempts. Access denied.");
+                    break;
+                }//if the user types wrong
+                else if (!ValidatePassword(input, inputPassword))
+                {
+                    Console.WriteLine($"Wrong username or password, try again.\n");
+                }
+                Console.WriteLine();
             }
-
-
-
-
-
         }
 
         //method to check if the username is correct
@@ -54,7 +61,9 @@ namespace Bankomat
         {
             for (int i = 0; i < users.Length; i++)
             {
-
+                /*när första index i idexen är noll och andra index är noll
+                 då är gäller den första användarnamnet och om den är korrekt 
+                är det sant annars är det falskt*/
                 if (users[i][0] == username)
                 {
                     return true;
@@ -68,9 +77,12 @@ namespace Bankomat
         {
             for (int i = 0; i < users.Length; i++)
             {
+                /*när första index i idexen är noll och andra index är noll
+                då är gäller den första användarnamnet och om den är korrekt 
+                är det sant annars är det falskt
+                gäller desamma med lösenord och användarnamn*/
                 if (users[i][0] == username && users[i][1] == password)
                 {
-
                     return true;
                 }
             }
