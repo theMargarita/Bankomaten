@@ -6,13 +6,17 @@ namespace Bankomat
     internal class Program
     {
         //Users with password
-        static string[][] users = { ["User01", "1111"], ["User02", "2222"], ["User03", "3333"], ["User04", "4444"], ["User05", "5555"] };
+        static string[][] users =
+            {
+            new string[]{ "User01", "1111" },
+            new string[]{"User02", "2222" },
+            new string[]{"User03", "3333" },
+            new string[]{ "User04", "4444" },
+            new string[]{"User05", "5555" }
+            };
         static void Main(string[] args)
         {
             Console.WriteLine("Welcome to the Bank AB. ");
-
-            string input = Console.ReadLine();
-            string inputPass = Console.ReadLine();
 
 
             bool login = true;
@@ -20,30 +24,42 @@ namespace Bankomat
 
             while (login)
             {
-                Console.WriteLine("Enter you username:");
-                string user = Console.ReadLine();
-                Console.WriteLine("Enter you password:");
-                string userPass = Console.ReadLine();
+
 
                 for (int i = 1; i < attempts; i++)
                 {
-                    for (int j = 0; j < users.Length; j++)
-                    {
+                    Console.WriteLine("Enter you username:");
+                    string input = Console.ReadLine();
+                    Console.WriteLine("Enter you password:");
+                    string inputPass = Console.ReadLine();
 
-                        if (users[j][0] == input && users[j][1] == inputPass)
-                        {
-                            Console.WriteLine(users);
-
-                        }
-                    }
                 }
-
+                if (!login)
+                {
+                    Console.WriteLine("You have failed to login in.");
+                    return;
+                }
+                TheMenu();
             }
 
 
 
         }
 
+        public static bool ValidateUser(string username)
+        {
+            for (int i = 0; i < users.Length; i++)
+            {
+                //input = Console.ReadLine();
+                //string inputPassword = Console.ReadLine();
+                if (users[i][0] == username)
+                {
+                    return true;
+
+                }
+            }
+            return false;
+        }
         public static void TheMenu()
         {
             bool trueORfalse = true;
