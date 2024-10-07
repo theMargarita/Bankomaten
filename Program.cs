@@ -1,5 +1,4 @@
-﻿using System.Security.Principal;
-using System;
+﻿using System;
 
 namespace Bankomat
 {
@@ -14,16 +13,24 @@ namespace Bankomat
             new string[] {"User04", "4444" },
             new string[] {"User05", "5555" }
         };
+
+        static decimal[][] accounts =
+        {
+            new decimal [] {5000.00m, 50000.00m},
+            new decimal [] {100000.00m},
+            new decimal [] {5000.00m, 50000.00m, 100000.00m},
+            new decimal [] {500.00m, 50000.00m, 50000.00m, 10000.00m},
+            new decimal [] {1000.00m, 50000.00m, 50000.00m, 5000.00m, 10000.00m}
+        };
         static void Main(string[] args)
         {
 
             bool login = true;
             int attempts = 3;
 
-            //for int i is 1 and if i is smaller than attempts, i rises with 1
-            //while (login) { }
             while (login)
             {
+                //i is tries in attempts
                 for (int i = 1; i <= attempts; i++)
                 {
                     Console.WriteLine("Welcome to the Margo Bank AB \n");
@@ -43,7 +50,7 @@ namespace Bankomat
                             TheMenu();
                         }
                     }
-                    //if the user uses all the attempts - program shuts down
+                    //if i (tries) is the same as attempts 
                     if (i == attempts)
                     {
                         Console.WriteLine("Too many failed attempts. Access denied.");
@@ -64,9 +71,7 @@ namespace Bankomat
         {
             for (int i = 0; i < users.Length; i++)
             {
-                /*när första index i idexen är noll och andra index är noll
-                 då är gäller den första användarnamnet och om den är korrekt 
-                är det sant annars är det falskt*/
+                /*i is the index of users to check if only the username is correct*/
                 if (users[i][0] == username)
                 {
                     return true;
@@ -80,10 +85,8 @@ namespace Bankomat
         {
             for (int i = 0; i < users.Length; i++)
             {
-                /*när första index i idexen är noll och andra index är noll
-                då är gäller den första användarnamnet och om den är korrekt 
-                är det sant annars är det falskt
-                gäller desamma med lösenord och användarnamn*/
+                /*i is the index of users and checks if the username and password of the correct 
+                 if yes then it is true, else false*/
                 if (users[i][0] == username && users[i][1] == password)
                 {
                     return true;
@@ -92,7 +95,7 @@ namespace Bankomat
             return false;
         }
 
-        //the menu method, if the users manage to sign in
+        //the menu method, if the users manage to sign in - the menu appears
         public static void TheMenu()
         {
             bool trueORfalse = true;
@@ -120,6 +123,7 @@ namespace Bankomat
                     case 4:
                         //while lopp not true, return to login 
                         Console.WriteLine("Signing out...");
+                        //wait three seconds before clearing
                         System.Threading.Thread.Sleep(1500);
                         Console.Clear();
                         trueORfalse = false;
