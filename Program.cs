@@ -7,14 +7,14 @@ namespace Bankomat
         //Users with password
         static string[][] users =
         {
+            new string[] {"User00", "0000" },
             new string[] {"User01", "1111" },
             new string[] {"User02", "2222" },
             new string[] {"User03", "3333" },
-            new string[] {"User04", "4444" },
-            new string[] {"User05", "5555" }
+            new string[] {"User04", "4444" }
         };
 
-        static decimal[][] accounts =
+        static decimal[][] accountsValue =
         {
             new decimal [] {5000.00m, 50000.00m},
             new decimal [] {100000.00m},
@@ -22,84 +22,101 @@ namespace Bankomat
             new decimal [] {500.00m, 50000.00m, 50000.00m, 10000.00m},
             new decimal [] {1000.00m, 50000.00m, 50000.00m, 5000.00m, 10000.00m}
         };
+
+        static string[][] accountsName =
+        {
+            new string[] {"Private account", "Savings"},
+            new string[] {"Private account"},
+            new string[] {"Private account", "Savings", "Retire Savings"},
+            new string[] {"Private account", "Savings", "Retire Savings", "Loans"},
+            new string[] {"Private account", "Savings", "Retire Savings", "Loans", "For fun"}
+        };
+
+
         static void Main(string[] args)
         {
-
             bool login = true;
             int attempts = 3;
 
             while (login)
             {
+                Console.WriteLine("Welcome to the Margo Bank AB \n");
+
                 //i is tries in attempts
                 for (int i = 1; i <= attempts; i++)
                 {
-                    Console.WriteLine("Welcome to the Margo Bank AB \n");
                     Console.WriteLine("Enter you username: ");
-                    string input = Console.ReadLine();
-                    Console.WriteLine("Enter your password: ");
-                    string inputPassword = Console.ReadLine();
+                    string userInput = Console.ReadLine();
 
-                    //to check if the username is correct 
-                    if (ValitadeUser(input))
+                    //varibalen för metoden som checkar användarnas inlogg
+                    int userLogin = ValidateUsername(users, userInput);
+                    
+                    Console.WriteLine("Enter your password: ");
+                    string password = Console.ReadLine();
+
+                    //if the user types wrong
+                    if (userLogin == -1)
                     {
-                        //to check the username and the password, if correct and in the same index
-                        if (ValidatePassword(input, inputPassword))
-                        {
-                            Console.WriteLine("The login was successful.\n");
-                            login = true;
-                            TheMenu();
-                        }
+                        Console.WriteLine($"Wrong username or password, try again.\n");
                     }
-                    //if i (tries) is the same as attempts 
+                    //to check if the username is correct 
+                    else if (users[userLogin][1] == password)
+                    {
+                        Console.WriteLine("The login was successful.\n");
+                        login = true;
+                        TheMenu(userLogin);
+                    }
+                    //if i (tries) is the same as attempts - shuts the program (something is wrong)
                     if (i == attempts)
                     {
                         Console.WriteLine("Too many failed attempts. Access denied.");
                         login = false;
-                    }
-                    //if the user types wrong
-                    else if (!ValidatePassword(input, inputPassword))
-                    {
-                        Console.WriteLine($"Wrong username or password, try again.\n");
                     }
                     Console.WriteLine();
                 }
             }
         }
 
-        //method to check if the username is correct
-        public static bool ValitadeUser(string username)
+        //method to check if the login is correct
+        public static int ValidateUsername(string[][] users, string userLogin)
         {
+            //int userIndex = -1;
             for (int i = 0; i < users.Length; i++)
             {
                 /*i is the index of users to check if only the username is correct*/
-                if (users[i][0] == username)
+                if (users[i][0] == userLogin)
                 {
-                    return true;
+                    return i;
                 }
             }
-            return false;
+            return -1;
         }
 
-        //method to check is the password is correct witht he right user
-        public static bool ValidatePassword(string username, string password)
+
+        //method to show the accounts and their value to the correct user (i hope)
+        public static void AccountsIndex(int userLogin, string[][] accountsName, decimal[][] accountsValue)
         {
-            for (int i = 0; i < users.Length; i++)
+            for (int i = 0; i < accountsName[userLogin].GetLength(0); i++)
             {
-                /*i is the index of users and checks if the username and password of the correct 
-                 if yes then it is true, else false*/
-                if (users[i][0] == username && users[i][1] == password)
-                {
-                    return true;
-                }
+                string accname = accountsName[userLogin][i];
+                decimal accvalue = accountsValue[userLogin][i];
+
+                Console.WriteLine($"{accname}: {accvalue:C}");
             }
-            return false;
+            Console.WriteLine("Press enter to return to menu.");
+            Console.ReadKey();
+            //wait three seconds before clearing
+            System.Threading.Thread.Sleep(100);
+            Console.Clear();
+
+
         }
+
 
         //the menu method, if the users manage to sign in - the menu appears
-        public static void TheMenu()
+        public static void TheMenu(int userLogin)
         {
             bool trueORfalse = true;
-
             while (trueORfalse)
             {
                 Console.WriteLine("Here are your options.\n");
@@ -112,6 +129,7 @@ namespace Bankomat
                 switch (userChoice)
                 {
                     case 1:
+                        AccountsIndex(userLogin, accountsName, accountsValue);
                         break;
 
                     case 2:
