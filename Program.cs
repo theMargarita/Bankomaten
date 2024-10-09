@@ -70,12 +70,10 @@ namespace Bankomat
                         TheMenu(userLogin);
                     }
                     //if i (tries) is the same as attempts - shutsdown the program 
-                    if (i == attempts)
+                    if (i == attempts && !login)
                     {
                         Console.WriteLine("Too many failed attempts. Access denied.");
-                        login = false;
                     }
-                    Console.WriteLine();
                 }
             }
         }
@@ -150,7 +148,7 @@ namespace Bankomat
                 Console.WriteLine("The transfer is now complete");
             }
             //if user tries to transfer to much of nonexisting money
-            else if(accountsValue[userLogin][fromIndex] > toIndex)
+            else if (accountsValue[userLogin][fromIndex] > toIndex)
             {
                 Console.WriteLine("You do not have enough money to transfer.");
             }
@@ -163,7 +161,39 @@ namespace Bankomat
             Console.WriteLine("Press enter to return to menu.");
             Console.ReadKey();
             //wait three seconds before clearing
-            System.Threading.Thread.Sleep(100);
+            //System.Threading.Thread.Sleep(1000);
+            Console.Clear();
+        }
+
+        public static void WithDrawMoney(int userLogin)
+        {
+            for (int i = 0; i < accountsName[userLogin].Length; i++)
+            {
+                string accname = accountsName[userLogin][i];
+                decimal accvalue = accountsValue[userLogin][i];
+                Console.WriteLine($"{i + 1}: {accname}: {accvalue:C}");
+            }
+
+            Console.WriteLine("Enter the account index you want to withdraw from\n");
+            int indexAccount = Convert.ToInt32(Console.ReadLine()) - 1;
+
+            Console.WriteLine("\nEnter the number you want to withdraw from your account?\n");
+            decimal theAmount = Convert.ToInt32(Console.ReadLine());
+
+            if (accountsValue[userLogin][indexAccount] >= theAmount)
+            {
+                //first part subtracts from the chosen account 
+                accountsValue[userLogin][indexAccount] -= theAmount;
+                Console.WriteLine("The transfer is now complete!\n");
+                Console.WriteLine($"{accountsName[userLogin][indexAccount]}: {accountsValue[userLogin][indexAccount]:C}");
+            }
+            else if (accountsValue[userLogin][indexAccount] < theAmount)
+            {
+                Console.WriteLine("Not enough money to withdraw.");
+                return;
+            }
+            Console.WriteLine("Press enter to return to menu");
+            Console.ReadKey();
             Console.Clear();
         }
 
@@ -180,6 +210,9 @@ namespace Bankomat
                 Console.WriteLine("4: Sign out");
                 int userChoice = Convert.ToInt32(Console.ReadLine());
 
+                //System.Threading.Thread.Sleep(1000);
+                //Console.Clear();
+
                 switch (userChoice)
                 {
                     case 1:
@@ -191,12 +224,13 @@ namespace Bankomat
                         break;
 
                     case 3:
+                        WithDrawMoney(userLogin);
                         break;
 
                     case 4:
                         //while lopp not true, return to login 
                         Console.WriteLine("Signing out...");
-                        //wait three seconds before clearing
+                        //pause 1 second before clearing
                         System.Threading.Thread.Sleep(1000);
                         Console.Clear();
                         trueORfalse = false;
