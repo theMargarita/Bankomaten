@@ -50,7 +50,7 @@ namespace Bankomat
 
                     //varibalen för metoden som checkar användarnas inlogg
                     int userLogin = ValidateUsername(users, userInput);
-                    
+
                     Console.WriteLine("Enter your password: ");
                     string password = Console.ReadLine();
 
@@ -64,9 +64,12 @@ namespace Bankomat
                     {
                         Console.WriteLine("The login was successful.\n");
                         login = true;
+                        //justa prefrence
+                        System.Threading.Thread.Sleep(1000);
+                        Console.Clear();
                         TheMenu(userLogin);
                     }
-                    //if i (tries) is the same as attempts - shuts the program (something is wrong)
+                    //if i (tries) is the same as attempts - shutsdown the program 
                     if (i == attempts)
                     {
                         Console.WriteLine("Too many failed attempts. Access denied.");
@@ -93,25 +96,76 @@ namespace Bankomat
         }
 
 
-        //method to show the accounts and their value to the correct user (i hope)
+        //method to show the accounts and their value to the correct user
         public static void AccountsIndex(int userLogin, string[][] accountsName, decimal[][] accountsValue)
         {
-            for (int i = 0; i < accountsName[userLogin].GetLength(0); i++)
+            for (int i = 0; i < accountsName[userLogin].Length; i++)
             {
                 string accname = accountsName[userLogin][i];
                 decimal accvalue = accountsValue[userLogin][i];
-
+                //C stands for currency
                 Console.WriteLine($"{accname}: {accvalue:C}");
             }
+            Console.WriteLine("Press enter to return to menu.");
+            Console.ReadKey();
+            //wait before clearing
+            System.Threading.Thread.Sleep(10);
+            Console.Clear();
+        }
+
+        //the last two parameter may not be so relevant
+        public static void TransferMoney(int userLogin)
+        {
+            //loop to show the users accounts
+            for (int i = 0; i < accountsName[userLogin].Length; i++)
+            {
+                string accname = accountsName[userLogin][i];
+                decimal accvalue = accountsValue[userLogin][i];
+                Console.WriteLine($"{i + 1}: {accname}: {accvalue:C}");
+            }
+
+            Console.WriteLine("Enter the number of the account you want to transfer from");
+            //-1 is for subtracting from the chosen index to the actual index
+            int fromIndex = Convert.ToInt32(Console.ReadLine()) - 1;
+
+            Console.WriteLine("Enter the number of account you want to transfer to");
+            int toIndex = Convert.ToInt32(Console.ReadLine()) - 1;
+
+            Console.WriteLine("How much do you want to transfer");
+            decimal theAmountInput = Convert.ToDecimal(Console.ReadLine());
+
+            //if user choses the same index to tranfsfer between - error
+            if (fromIndex == toIndex)
+            {
+                Console.WriteLine("You can not transfer between one account.");
+                return;
+            }
+            //if the method, userLogin, and first input index is bigger / equal to the amount
+            else if (accountsValue[userLogin][fromIndex] >= theAmountInput)
+            {
+                //first part subtracts from the chosen account 
+                accountsValue[userLogin][fromIndex] -= theAmountInput;
+                //second part adds to the chosen account
+                accountsValue[userLogin][toIndex] += theAmountInput;
+                Console.WriteLine("The transfer is now complete");
+            }
+            //if user tries to transfer to much of nonexisting money
+            else if(accountsValue[userLogin][fromIndex] > toIndex)
+            {
+                Console.WriteLine("You do not have enough money to transfer.");
+            }
+            else
+            {
+                Console.WriteLine("Something went wrong");
+                return;
+            }
+
             Console.WriteLine("Press enter to return to menu.");
             Console.ReadKey();
             //wait three seconds before clearing
             System.Threading.Thread.Sleep(100);
             Console.Clear();
-
-
         }
-
 
         //the menu method, if the users manage to sign in - the menu appears
         public static void TheMenu(int userLogin)
@@ -133,6 +187,7 @@ namespace Bankomat
                         break;
 
                     case 2:
+                        TransferMoney(userLogin);
                         break;
 
                     case 3:
@@ -142,7 +197,7 @@ namespace Bankomat
                         //while lopp not true, return to login 
                         Console.WriteLine("Signing out...");
                         //wait three seconds before clearing
-                        System.Threading.Thread.Sleep(1500);
+                        System.Threading.Thread.Sleep(1000);
                         Console.Clear();
                         trueORfalse = false;
                         break;
