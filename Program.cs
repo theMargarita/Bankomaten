@@ -73,12 +73,13 @@ namespace Bankomat
                     if (i == attempts && !login)
                     {
                         Console.WriteLine("Too many failed attempts. Access denied.");
+                        login = false;
                     }
                 }
             }
         }
 
-        //method to check if the login is correct
+        //login checker method
         public static int ValidateUsername(string[][] users, string userLogin)
         {
             //int userIndex = -1;
@@ -93,25 +94,22 @@ namespace Bankomat
             return -1;
         }
 
-
-        //method to show the accounts and their value to the correct user
+        //accounts & values method for the correct user
         public static void AccountsIndex(int userLogin, string[][] accountsName, decimal[][] accountsValue)
         {
             for (int i = 0; i < accountsName[userLogin].Length; i++)
             {
                 string accname = accountsName[userLogin][i];
                 decimal accvalue = accountsValue[userLogin][i];
-                //C stands for currency
                 Console.WriteLine($"{accname}: {accvalue:C}");
             }
-            Console.WriteLine("Press enter to return to menu.");
+            Console.WriteLine("\nPress enter to return to menu.");
             Console.ReadKey();
             //wait before clearing
             System.Threading.Thread.Sleep(10);
             Console.Clear();
         }
 
-        //the last two parameter may not be so relevant
         public static void TransferMoney(int userLogin)
         {
             //loop to show the users accounts
@@ -122,46 +120,43 @@ namespace Bankomat
                 Console.WriteLine($"{i + 1}: {accname}: {accvalue:C}");
             }
 
-            Console.WriteLine("Enter the number of the account you want to transfer from");
+            Console.WriteLine("\nEnter the number of the account you want to transfer from");
             //-1 is for subtracting from the chosen index to the actual index
             int fromIndex = Convert.ToInt32(Console.ReadLine()) - 1;
 
-            Console.WriteLine("Enter the number of account you want to transfer to");
+            Console.WriteLine("\nEnter the number of account you want to transfer to");
             int toIndex = Convert.ToInt32(Console.ReadLine()) - 1;
+            Console.WriteLine();
 
-            Console.WriteLine("How much do you want to transfer");
+            Console.WriteLine("\nHow much do you want to transfer");
             decimal theAmountInput = Convert.ToDecimal(Console.ReadLine());
 
-            //if user choses the same index to tranfsfer between - error
             if (fromIndex == toIndex)
             {
-                Console.WriteLine("You can not transfer between one account.");
+                Console.WriteLine("\nYou can not transfer between one account");
                 return;
             }
-            //if the method, userLogin, and first input index is bigger / equal to the amount
+            //statement for trensfering between accounts
             else if (accountsValue[userLogin][fromIndex] >= theAmountInput)
             {
                 //first part subtracts from the chosen account 
                 accountsValue[userLogin][fromIndex] -= theAmountInput;
                 //second part adds to the chosen account
                 accountsValue[userLogin][toIndex] += theAmountInput;
-                Console.WriteLine("The transfer is now complete");
+                Console.WriteLine("The transfer is now complete\n");
             }
-            //if user tries to transfer to much of nonexisting money
             else if (accountsValue[userLogin][fromIndex] > toIndex)
             {
-                Console.WriteLine("You do not have enough money to transfer.");
+                Console.WriteLine("\nYou do not have enough money to transfer");
+                return;
             }
             else
             {
-                Console.WriteLine("Something went wrong");
+                Console.WriteLine("\nSomething went wrong");
                 return;
             }
-
             Console.WriteLine("Press enter to return to menu.");
             Console.ReadKey();
-            //wait three seconds before clearing
-            //System.Threading.Thread.Sleep(1000);
             Console.Clear();
         }
 
@@ -174,11 +169,11 @@ namespace Bankomat
                 Console.WriteLine($"{i + 1}: {accname}: {accvalue:C}");
             }
 
-            Console.WriteLine("Enter the account index you want to withdraw from\n");
+            Console.WriteLine("\nEnter the account index you want to withdraw from");
             int indexAccount = Convert.ToInt32(Console.ReadLine()) - 1;
 
-            Console.WriteLine("\nEnter the number you want to withdraw from your account?\n");
-            decimal theAmount = Convert.ToInt32(Console.ReadLine());
+            Console.WriteLine("\nEnter the number you want to withdraw from your account?");
+            decimal theAmount = Convert.ToDecimal(Console.ReadLine());
 
             if (accountsValue[userLogin][indexAccount] >= theAmount)
             {
@@ -189,10 +184,10 @@ namespace Bankomat
             }
             else if (accountsValue[userLogin][indexAccount] < theAmount)
             {
-                Console.WriteLine("Not enough money to withdraw.");
+                Console.WriteLine("\nNot enough money to withdraw.\n");
                 return;
             }
-            Console.WriteLine("Press enter to return to menu");
+            Console.WriteLine("\nPress enter to return to menu");
             Console.ReadKey();
             Console.Clear();
         }
@@ -209,9 +204,7 @@ namespace Bankomat
                 Console.WriteLine("3: Withdraw money");
                 Console.WriteLine("4: Sign out");
                 int userChoice = Convert.ToInt32(Console.ReadLine());
-
-                //System.Threading.Thread.Sleep(1000);
-                //Console.Clear();
+                Console.Clear();
 
                 switch (userChoice)
                 {
