@@ -48,35 +48,41 @@ namespace Bankomat
                     Console.WriteLine("Enter you username: ");
                     string userInput = Console.ReadLine();
 
-                    //varibalen för metoden som checkar användarnas inlogg
-                    int userLogin = ValidateUsername(users, userInput);
-
                     Console.WriteLine("Enter your password: ");
                     string password = Console.ReadLine();
 
-                    //if the user types wrong
-                    if (userLogin == -1)
+                    //varibalen för metoden som checkar användarnas inlogg
+                    int userLogin = ValidateUsername(users, userInput);
+
+
+                    //if - the user types the wrong username or password
+                    if (userLogin == -1 || users[userLogin][1] != password)
                     {
                         Console.WriteLine($"Wrong username or password, try again.\n");
+                        //if - i (tries) is the same as attempts - shutsdown the program 
+                        if (i == attempts)
+                        {
+                            Console.WriteLine("Too many failed attempts. Access denied.");
+                            login = false;
+                        }
+                        //whitespace counts as wrong input
+                        else if (string.IsNullOrWhiteSpace(userInput) || string.IsNullOrWhiteSpace(password))
+                        {
+                        }
                     }
                     //to check if the username is correct 
                     else if (users[userLogin][1] == password)
                     {
                         Console.WriteLine("The login was successful.\n");
                         login = true;
-                        //justa prefrence
                         System.Threading.Thread.Sleep(1000);
                         Console.Clear();
                         TheMenu(userLogin);
                     }
-                    //if i (tries) is the same as attempts - shutsdown the program 
-                    if (i == attempts && !login)
-                    {
-                        Console.WriteLine("Too many failed attempts. Access denied.");
-                        login = false;
-                    }
+
                 }
             }
+
         }
 
         //login checker method
@@ -105,8 +111,6 @@ namespace Bankomat
             }
             Console.WriteLine("\nPress enter to return to menu.");
             Console.ReadKey();
-            //wait before clearing
-            System.Threading.Thread.Sleep(10);
             Console.Clear();
         }
 
@@ -134,6 +138,8 @@ namespace Bankomat
             if (fromIndex == toIndex)
             {
                 Console.WriteLine("\nYou can not transfer between one account");
+                System.Threading.Thread.Sleep(1000);
+                Console.Clear();
                 return;
             }
             //statement for trensfering between accounts
@@ -169,7 +175,7 @@ namespace Bankomat
                 Console.WriteLine($"{i + 1}: {accname}: {accvalue:C}");
             }
 
-            Console.WriteLine("\nEnter the account index you want to withdraw from");
+            Console.WriteLine("\nEnter the account index number you want to withdraw from");
             int indexAccount = Convert.ToInt32(Console.ReadLine()) - 1;
 
             Console.WriteLine("\nEnter the number you want to withdraw from your account?");
@@ -179,12 +185,14 @@ namespace Bankomat
             {
                 //first part subtracts from the chosen account 
                 accountsValue[userLogin][indexAccount] -= theAmount;
-                Console.WriteLine("The transfer is now complete!\n");
+                Console.WriteLine("The withdrawal is now complete!\n");
                 Console.WriteLine($"{accountsName[userLogin][indexAccount]}: {accountsValue[userLogin][indexAccount]:C}");
             }
             else if (accountsValue[userLogin][indexAccount] < theAmount)
             {
-                Console.WriteLine("\nNot enough money to withdraw.\n");
+                Console.WriteLine("\nNot enough money to withdraw\n");
+                System.Threading.Thread.Sleep(1000);
+                Console.Clear();
                 return;
             }
             Console.WriteLine("\nPress enter to return to menu");
